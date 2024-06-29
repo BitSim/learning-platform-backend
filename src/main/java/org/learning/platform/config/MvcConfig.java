@@ -16,10 +16,10 @@ import javax.annotation.Resource;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new UserAuthenticationInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/user/login")
-                .excludePathPatterns("/user/register");
+//        registry.addInterceptor(new UserAuthenticationInterceptor())
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/api/user/login")
+//                .excludePathPatterns("/api/user/register");
     }
 
 

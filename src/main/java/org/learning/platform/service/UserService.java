@@ -1,8 +1,10 @@
 package org.learning.platform.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.learning.platform.dto.ResponseResult;
 import org.learning.platform.dto.ResponseStatus;
+import org.learning.platform.dto.UserDTO;
 import org.learning.platform.entity.User;
 import org.learning.platform.mapper.UserMapper;
 import org.learning.platform.util.PasswordUtil;
@@ -47,9 +49,22 @@ public class UserService {
             return ResponseResult.error(ResponseStatus.USERNAME_OR_PASSWORD_ERROR);
         HttpSession session = request.getSession();  //获取session作用域
         //保存用户会话状态并设置有效时间为2h
-        session.setAttribute("user", u);
+        session.setAttribute("user", BeanUtil.copyProperties(u, UserDTO.class));
         session.setMaxInactiveInterval(2 * 60 * 60);
         log.info("用户{}登录成功", u.getUsername());
+        //更新currentLogin为当前时间
+        userMapper.updateCurrentLogin(u.getId());
         return ResponseResult.success();
+    }
+
+    public ResponseResult progress(User user) {
+        //在study_time的字段增加时间
+        userMapper.updateStudyTime(user.getId(), user.getStudyTime());
+        return ResponseResult.success();
+
+    }
+
+    public ResponseResult getUserList() {
+        return ResponseResult.success(userMapper.selectList(null));
     }
 }

@@ -32,10 +32,8 @@ public class UserAuthenticationInterceptor implements HandlerInterceptor {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return  false;
         }
-        User user1 = (User) user;
-        log.info("用户{}已登录", user1.getUsername());
-        //全局操作
-        BeanUtils.copyProperties(user1, UserHolder.getCurrentUser());
+        UserHolder.setCurrentUser( (UserDTO) user);
+        log.info("用户{}已登录", UserHolder.getCurrentUser().getUsername());
         return true;
     }
 
